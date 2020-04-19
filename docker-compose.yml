@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+  localstack:
+    image: localstack/localstack:latest
+    privileged: true
+    ports:
+      - '4566-4599:4566-4599'
+      #- "4567-4597:4567-4597"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=s3,kinesis,lambda,cloudwatch,iam
+      - DEBUG=${DEBUG:-5}
+      - DATA_DIR=${DATA_DIR:-/tmp/localstack}
+      - PORT_WEB_UI=${PORT_WEB_UI:- }
+      - LAMBDA_EXECUTOR=${LOCALSTACK_LAMBDA_EXECUTOR:-local}
+      - LAMBDA_REMOTE_DOCKER=${LOCALSTACK_LAMBDA_REMOTE_DOCKER:-false}
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY:-0.0}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION="us-east-1"
+      - AWS_CBOR_DISABLE=1
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
