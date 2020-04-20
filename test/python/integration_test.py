@@ -11,6 +11,7 @@ class CentralizedLoggingPocTest(unittest.TestCase):
     s3_client = ''
     test_data = []
     expect_data = []
+    bucket_name = 'central-log'
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -50,16 +51,16 @@ class CentralizedLoggingPocTest(unittest.TestCase):
         self.assertEqual(0, kinesis_response['FailedRecordCount'])
 
         # test s3 - 정상적으로 lambda 가 호출되었으면 s3 에 *.json.gz 파일이 업로드되어야 한다
-        s3_response = self.s3_client.list_objects_v2(Bucket="access-log")
+        s3_response = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
         self.assertEqual(200, s3_response['ResponseMetadata']['HTTPStatusCode'])
         s3_key = s3_response['Contents'][-1]['Key']
         print("\n> Uploaded S3 - latest file object key: " + s3_key)
         self.assertTrue(str(s3_key).startswith(
-            datetime.datetime.now(tz=datetime.timezone.utc).strftime('year=%Y/month=%m/day=%d/access_log_')))
+            datetime.datetime.now(tz=datetime.timezone.utc).strftime('access_log/year=%Y/month=%m/day=%d/access_log_')))
 
         # test s3 - s3 에 업로드된 json 파일의 내용을 검증
         zip_file = "s3_temp_json.gz"
-        self.s3_client.download_file("access-log", s3_key, zip_file)
+        self.s3_client.download_file(self.bucket_name, s3_key, zip_file)
         line_count = 0
         with gzip.open(zip_file, 'r') as content:
             for line in content:
