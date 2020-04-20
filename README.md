@@ -5,7 +5,7 @@ AWS에 배포된 웹서버(nginx)를 대상으로 중앙화된 로깅 파이프�
 * 목차
   * [구조](#구조)
   * [centralized-logging-pipeline 구성 절차](#centralized-logging-pipeline-구성-절차)
-    * [Requires](#requires)
+    * [Requirements](#requirements)
     * [테스트 환경](#테스트-환경)
     * [구성 절차](#구성-절차)
   * [개념 검증(PoC) 수행 내용](#개념-검증poc-수행-내용)
@@ -104,7 +104,7 @@ AWS에 배포된 웹서버(nginx)를 대상으로 중앙화된 로깅 파이프�
 
 
 # centralized-logging-pipeline 구성 절차
-## Requires
+## Requirements
 * python 3
 * pip (python package manager)
 * Docker
@@ -126,7 +126,7 @@ $ curl -L -o master.zip https://codeload.github.com/wynn1275/centralized-logging
 $ unzip master.zip
 
 ### 2. start localstack
-$ cd cd centralized-logging-pipeline-master/
+$ cd centralized-logging-pipeline-master/
 $ docker-compose up -d
 
 ### 3. apply AWS infrastructure (terraform)
