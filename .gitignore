@@ -1,2 +1,5 @@
 # intellij
 .idea/
+
+# test result
+test/python/s3_temp_json.gz
