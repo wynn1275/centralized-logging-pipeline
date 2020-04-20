@@ -1,0 +1,46 @@
+[
+  {
+    "remote": "1.1.1.1",
+    "host": "-",
+    "user": "-",
+    "datetime": "19/Apr/2020:04:07:59 +0000",
+    "method": "GET",
+    "path": "/ ",
+    "code": "200",
+    "size": "3184",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36"
+  },
+  {
+    "remote": "2.2.2.2",
+    "host": "-",
+    "user": "-",
+    "datetime": "19/Apr/2020:04:08:00 +0000",
+    "method": "GET",
+    "path": "/ ",
+    "code": "200",
+    "size": "3184",
+    "agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
+  },
+  {
+    "remote": "3.3.3.3",
+    "host": "-",
+    "user": "-",
+    "datetime": "19/Apr/2020:04:08:01 +0000",
+    "method": "GET",
+    "path": "/common/js/bootstrap.min.js ",
+    "code": "200",
+    "size": "5569",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36"
+  },
+  {
+    "remote": "4.4.4.4",
+    "host": "-",
+    "user": "-",
+    "datetime": "19/Apr/2020:04:08:00 +0000",
+    "method": "POST",
+    "path": "/ ",
+    "code": "404",
+    "size": "3184",
+    "agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
+  }
+]
