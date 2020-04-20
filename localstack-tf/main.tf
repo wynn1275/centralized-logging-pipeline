@@ -23,7 +23,7 @@ resource "aws_kinesis_stream" "central_logging_stream" {
 }
 
 resource "aws_s3_bucket" "log_storage" {
-  bucket = "access-log"
+  bucket = "central-log"
   acl    = "private"
 }
 
