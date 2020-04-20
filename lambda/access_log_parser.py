@@ -6,7 +6,7 @@ import re
 
 import boto3
 
-bucket_name = 'access-log'
+bucket_name = 'central-log'
 
 nginx_log_format = re.compile(
     r"""(?P<remote>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) (?P<host>.+) (?P<user>.+) \[(?P<datetime>\d{2}\/[a-z]{3}\/\d{4}:\d{2}:\d{2}:\d{2} (\+|\-)\d{4})\] ((\"(?P<method>.+) )(?P<path>.+)(http\/[1-2]\.[0-9]")) (?P<code>\d{3}) (?P<size>\d+) (["](?P<refferer>(\-)|(.+))["]) (["](?P<agent>.+)["])""",
@@ -38,7 +38,7 @@ def parse_log(log):
 
 def upload_s3(body):
     now = datetime.datetime.now()
-    key_name = now.strftime('year=%Y/month=%m/day=%d/access_log_%H%M%S.json.gz')
+    key_name = now.strftime('access_log/year=%Y/month=%m/day=%d/access_log_%H%M%S.json.gz')
     s3 = boto3.client('s3', endpoint_url='http://localhost:4572')
     try:
         # Add a file to your Object Store
