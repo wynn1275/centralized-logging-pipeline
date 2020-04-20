@@ -138,9 +138,9 @@ $ terraform apply
 # 개념 검증(PoC) 수행 내용
 ## using python code (unittest)
 #### PoC 개요
-* AWS sdk(boto3)을 사용하여 Kinesis data stream 으로 mock 레코드(nginx access log) 를 전송 (Kinesis put-object)
+* AWS SDK(boto3)을 사용하여 Kinesis data stream 으로 mock 레코드(nginx access log) 를 전송 (Kinesis put-object)
 * Lambda 는 Kinesis 로부터 레코드를 읽어 JSON 으로 변환 후 S3 로 저장
-* 수행 내용은 python unittest 의 assert 를 통해 검증
+* 수행 내용은 python unittest 의 assert 함수를 통해 검증
 
 #### PoC 실행 방법
 ```bash
@@ -192,6 +192,7 @@ OK
 $ cd test/td-agent/
 
 ### td-agent start
+# td-agent start 전 td-agent.conf 의 kinesis endpoint 수정 필요
 $ bash run-td-agent.sh
 
 ### td-agent stop
@@ -200,7 +201,7 @@ $ bash stop-td-agent.sh
 
 #### 결과
 * nginx access_log
-```bash
+```text
 [root@jy1 td-agent]# tail -f  /home/apps/logs/nginx_access.log
 112.168.224.198 - - [20/Apr/2020:11:35:47 +0000] "GET / HTTP/1.1" 200 3184 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/8     1.0.4044.113 Safari/537.36"
 185.2.196.196 - - [20/Apr/2020:11:35:49 +0000] "GET / HTTP/1.1" 200 3184 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
@@ -210,7 +211,7 @@ $ bash stop-td-agent.sh
 112.168.224.198 - - [20/Apr/2020:11:35:59 +0000] "GET /old2/ HTTP/1.1" 200 867 "http://183.111.252.151/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (K     HTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36"
 ```
 * Lambda console log
-```bash
+```text
 [root@jy3 localstack-tf]# aws --endpoint-url=http://localhost:4566 logs tail /aws/lambda/accessLogParser --follow
 2020-04-20T11:36:48.647000+00:00 2020/04/20/[LATEST]d440aee8 {"remote": "112.168.224.198", "host": "-", "user": "-", "datetime": "20/Apr/2020:11:35:47 +0000", "method": "GET", "path": "/ ", "code": "200", "size": "3184", "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36"}
 2020-04-20T11:36:48.654000+00:00 2020/04/20/[LATEST]d440aee8 {"remote": "185.2.196.196", "host": "-", "user": "-", "datetime": "20/Apr/2020:11:35:49 +0000", "method": "GET", "path": "/ ", "code": "200", "size": "3184", "agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"}
@@ -222,7 +223,7 @@ $ bash stop-td-agent.sh
 ```
 
 * S3 uploaded object
-```bash
+```text
 [root@jy3 localstack-tf]# aws --endpoint-url=http://localhost:4566 s3api list-objects --bucket central-log
 {
     "Contents": [
@@ -242,7 +243,7 @@ $ bash stop-td-agent.sh
 ```
 
 * S3 uploaded object content
-```bash
+```text
 [root@jy3 localstack-tf]# aws --endpoint-url=http://localhost:4566 s3api get-object --bucket central-log --key access_log/year=2020/month=04/day=20/access_log_113648.json.gz access-log.json.gz && gzip -d access-log.json.gz && cat access-log.json
 {
     "LastModified": "2020-04-20T11:36:48+00:00",
