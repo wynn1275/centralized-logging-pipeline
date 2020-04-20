@@ -1,10 +1,17 @@
 # centralized-logging-pipeline
-AWS에 배포된 웹서버(nginx)를 대상으로 중앙화된 로깅 파이프라인(Centralized Logging Pipeline) 구축 (with Kinesis data stream + Lambda + S3)
+AWS에 배포된 웹서버(nginx)를 대상으로 중앙화된 로깅 파이프라인(Centralized Logging Pipeline) 구축
+(with Kinesis data stream + Lambda + S3)
 
 * 목차
   * [구조](#구조)
   * [centralized-logging-pipeline 구성 절차](#centralized-logging-pipeline-구성-절차)
-  * [개념 검증(PoC) 수행 내용](#개념-검증(PoC)-수행-내용)
+    * [Requires](#requires)
+    * [테스트 환경](#테스트-환경)
+    * [구성 절차](#구성-절차)
+  * [개념 검증(PoC) 수행 내용](#개념-검증poc-수행-내용)
+    * [using python code (unittest)](#using-python-code-unittest)
+    * [nginx + td agent](#nginx--td-agent)
+---
 
 # 구조
 ![central_loggin_arch.png](central_loggin_arch.png)
@@ -92,6 +99,7 @@ AWS에 배포된 웹서버(nginx)를 대상으로 중앙화된 로깅 파이프�
 ]
 ```
 * Lambda (accessLogParser) 는 JSON 형식의 accessLog 를 S3 bucket (central-log) 에 저장합니다.
+  * S3 bucket name : `central-log`
   * S3 object name format : `access_log/year=%Y/month=%m/day=%d/access_log_%H%M%S.json.gz`
 
 
@@ -128,19 +136,19 @@ $ terraform apply
 ```
 
 # 개념 검증(PoC) 수행 내용
-## python code (unittest)
-##### PoC 개요
+## using python code (unittest)
+#### PoC 개요
 * AWS sdk(boto3)을 사용하여 Kinesis data stream 으로 mock 레코드(nginx access log) 를 전송 (Kinesis put-object)
 * Lambda 는 Kinesis 로부터 레코드를 읽어 JSON 으로 변환 후 S3 로 저장
 * 수행 내용은 python unittest 의 assert 를 통해 검증
 
-##### PoC 실행 방법
+#### PoC 실행 방법
 ```bash
 $ cd test/python/
 $ python integration_test.py
 ```
 
-##### 결과
+#### 결과
 ```text
 (venv) C:\workspace\centralized-logging-pipeline\test\python>python integration_test.py
 
@@ -171,15 +179,15 @@ OK
 ```
 
 ## nginx + td agent
-##### PoC 개요
+#### PoC 개요
 * nginx 가 설치된 서버에 td-agent (with aws-fluent-plugin-kinesis) 를 사용하여 Kinesis 로 access_log 를 전송
  
-##### Requires
+#### Requires
 * Ruby 2.3.0+
 * Fluentd 0.14.22+ (td-agent v3.1.0+)
 * [aws-fluentd-plugin-kinesis](https://github.com/awslabs/aws-fluent-plugin-kinesis)
 
-##### PoC 실행 방법
+#### PoC 실행 방법
 ```bash
 $ cd test/td-agent/
 
@@ -190,7 +198,7 @@ $ bash run-td-agent.sh
 $ bash stop-td-agent.sh
 ``` 
 
-##### 결과
+#### 결과
 * nginx access_log
 ```bash
 [root@jy1 td-agent]# tail -f  /home/apps/logs/nginx_access.log
