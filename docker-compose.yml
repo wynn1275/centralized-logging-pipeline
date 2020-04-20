@@ -16,7 +16,7 @@ services:
       - LAMBDA_REMOTE_DOCKER=${LOCALSTACK_LAMBDA_REMOTE_DOCKER:-false}
       - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY:-0.0}
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - DEFAULT_REGION="us-east-1"
+      - DEFAULT_REGION=us-east-1
       - AWS_CBOR_DISABLE=1
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
